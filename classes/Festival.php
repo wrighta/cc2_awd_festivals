@@ -11,6 +11,9 @@ class Festival {
   public $contact_name;
   public $contact_email;
   public $contact_phone;
+  public $image_id;
+
+
 
   public function __construct() {
     $this->id = null;
@@ -64,6 +67,7 @@ class Festival {
           $festival->contact_name = $row['contact_name'];
           $festival->contact_email = $row['contact_email'];
           $festival->contact_phone = $row['contact_phone'];
+          $festival->image_id = $row['image_id'];
 
           // $festival now has all it's attributes assigned, so put it into the array $festivals[] 
           $festivals[] = $festival;
