@@ -1,15 +1,22 @@
 <?php require_once 'config.php';
 
 try {
+
+  // The $rules array has 3 rules, festival_id must be present, must be an integer and have a minimum value of 1.  
+  // note festival_id was passed in from festival_index.php when you chose a festival by clicking a radio button. 
   $rules = [
     'festival_id' => 'present|integer|min:1'
   ];
+  // $request->validate() is a function in HttpRequest(). You pass in the 3 rules above and it does it's magic. 
   $request->validate($rules);
   if (!$request->is_valid()) {
     throw new Exception("Illegal request");
   }
+
+  // get the festival_id out of the request (remember it was passed in from festival_index.php)
   $festival_id = $request->input('festival_id');
-  /*Retrieving a festival object*/
+ 
+  //Retrieve the festival object from the database by calling findById($festival_id) in the Festival.php class
   $festival = Festival::findById($festival_id);
   if ($festival === null) {
     throw new Exception("Illegal request parameter");
@@ -18,6 +25,7 @@ try {
   $request->session()->set("flash_message", $ex->getMessage());
   $request->session()->set("flash_message_class", "alert-warning");
 
+  // some exception/error occured so re-direct to the home page
   $request->redirect("/home.php");
 }
 
@@ -70,6 +78,7 @@ try {
               <div class="form-group">
                 <label class="labelHidden" for="location">Location</label>
                 <select class="form-control" name="location" id="location" disabled>
+                  <!-- triple === means if it is equal. So is location is equal to "USA" display USA, if location is equal to "Belgium" display ...you get the idea..-->
                   <option value="USA" <?= (($festival->location === "USA") ? "selected" : "") ?>>USA</option>
                   <option value="Belgium" <?= (($festival->location === "Belgium") ? "selected" : "") ?>>Belgium</option>>
                   <option value="Brazil" <?= (($festival->location === "Brazil") ? "selected" : "") ?>>Brazil</option>
