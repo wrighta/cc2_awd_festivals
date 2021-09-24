@@ -88,7 +88,51 @@ class Festival {
   }
 
   public static function findById($id) {
-    throw new Exception("Not yet implemented");
+    $festival = null;
+
+    try {
+      $db = new DB();
+      $db->open();
+      $conn = $db->get_connection();
+
+      $select_sql = "SELECT * FROM festivals WHERE id = :id";
+      $select_params = [
+          ":id" => $id
+      ];
+      $select_stmt = $conn->prepare($select_sql);
+      $select_status = $select_stmt->execute($select_params);
+
+      if (!$select_status) {
+        $error_info = $select_stmt->errorInfo();
+        $message = "SQLSTATE error code = ".$error_info[0]."; error message = ".$error_info[2];
+        throw new Exception("Database error executing database query: " . $message);
+      }
+
+      if ($select_stmt->rowCount() !== 0) {
+        $row = $select_stmt->fetch(PDO::FETCH_ASSOC);
+          
+        $festival = new Festival();
+        $festival->id = $row['id'];
+        $festival->title = $row['title'];
+        $festival->description = $row['description'];
+        $festival->location = $row['location'];
+        $festival->start_date = $row['start_date'];
+        $festival->end_date = $row['end_date'];
+        $festival->contact_name = $row['contact_name'];
+        $festival->contact_email = $row['contact_email'];
+        $festival->contact_phone = $row['contact_phone'];
+        $festival->image_id = $row['image_id'];
+      }
+    }
+    finally {
+      if ($db !== null && $db->is_open()) {
+        $db->close();
+      }
+    }
+
+    return $festival;
   }
+
+  
 }
 ?>
