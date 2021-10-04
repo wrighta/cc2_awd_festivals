@@ -13,7 +13,7 @@ try {
 
     // Call the findAll() function in classes/Festival.php
     // This function returns an array $festivals[] which is retrieved from the database
-    $festivals = Festival::findAll();
+    $festivals = Festial::findAll();
 }
 // If there were any exceptions thrown in the above try block they will be caught here and put into the session data.
 catch (Exception $ex){
