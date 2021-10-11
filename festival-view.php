@@ -25,8 +25,8 @@ try {
   $request->session()->set("flash_message", $ex->getMessage());
   $request->session()->set("flash_message_class", "alert-warning");
 
-  // some exception/error occured so re-direct to the home page
-  $request->redirect("/home.php");
+  // some exception/error occured so re-direct to the index page
+  $request->redirect("/festival-index.php");
 }
 
 ?>
@@ -136,7 +136,7 @@ try {
               </div>
 
               <div class="form-group">
-                <a class="btn btn-default" href="<?= APP_URL ?>/home.php">Cancel</a>
+                <a class="btn btn-default" href="<?= APP_URL ?>/festival-index.php">Cancel</a>
                 <button class="btn btn-warning" formaction="<?= APP_URL ?>/festival-edit.php">Edit</button>
                 <button class="btn btn-danger btn-festival-delete" formaction="<?= APP_URL ?>/festival-delete.php">Delete</button>
               </div>

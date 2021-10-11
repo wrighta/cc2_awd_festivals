@@ -20,11 +20,103 @@ class Festival {
   }
 
   public function save() {
-    throw new Exception("Not yet implemented");
+    try {
+      //Create the usual database connection - $conn
+      $db = new DB();
+      $db->open();
+      $conn = $db->get_connection();
+
+      $params = [
+        ":title" => $this->title,
+        ":description" => $this->description,
+        ":location" => $this->location,
+        ":start_date" => $this->start_date,
+        ":end_date" => $this->end_date,
+        ":contact_name" => $this->contact_name,
+        ":contact_email" => $this->contact_email,
+        ":contact_phone" => $this->contact_phone,
+        ":image_id" => $this->image_id
+      ];
+
+      // We will uncomment this code when we get to do the Create 
+      // If there is no ID yet, then it's a new festival being created for the first time
+      // if ($this->id === null) {
+      //   $sql = "INSERT INTO festivals (" .
+      //     "title, description, location, start_date, end_date, contact_name, contact_email, contact_phone, image_id" .
+      //     ") VALUES (" .
+      //     ":title, :description, :location, :start_date, :end_date, :contact_name, :contact_email, :contact_phone, :image_id" .
+      //     ")";
+      // } else {
+        // if there is an ID then it's an update for an existing festival in the database. 
+        $sql = "UPDATE festivals SET " .
+          "title = :title, " .
+          "description = :description, " .
+          "location = :location, " .
+          "start_date = :end_date, " .
+          "end_date = :end_date, " .
+          "contact_name = :contact_name, " .
+          "contact_email = :contact_email, " .
+          "contact_phone = :contact_phone, " .
+          "image_id = :image_id " .
+          "WHERE id = :id";
+        $params[":id"] = $this->id;
+    //  }
+
+
+      $stmt = $conn->prepare($sql);
+      $status = $stmt->execute($params);
+
+      if (!$status) {
+        $error_info = $stmt->errorInfo();
+        $message = "SQLSTATE error code = " . $error_info[0] . "; error message = " . $error_info[2];
+        throw new Exception("Database error executing database query: " . $message);
+      }
+
+      if ($stmt->rowCount() !== 1) {
+        throw new Exception("Failed to save festival.");
+      }
+
+      //If the save() was a new festival created it won't have an ID
+      // so retrieve the ID assigned by the DB. - remember auto_increment in the Database for assigning primary keys
+      // if ($this->id === null) {
+      //   $this->id = $conn->lastInsertId();
+      // }
+    } finally {
+      if ($db !== null && $db->is_open()) {
+        $db->close();
+      }
+    }
   }
 
   public function delete() {
-    throw new Exception("Not yet implemented");
+    try {
+      /*Create connection.*/
+      $db = new DB();
+      $db->open();
+      $conn = $db->get_connection();
+
+      $sql = "DELETE FROM festivals WHERE id = :id";
+      $params = [
+        ":id" => $this->id
+      ];
+
+      $stmt = $conn->prepare($sql);
+      $status = $stmt->execute($params);
+
+      if (!$status) {
+        $error_info = $stmt->errorInfo();
+        $message = "SQLSTATE error code = " . $error_info[0] . "; error message = " . $error_info[2];
+        throw new Exception("Database error executing database query: " . $message);
+      }
+
+      if ($stmt->rowCount() !== 1) {
+        throw new Exception("Failed to delete festival.");
+      }
+    } finally {
+      if ($db !== null && $db->is_open()) {
+        $db->close();
+      }
+    }
   }
 
   public static function findAll() {
