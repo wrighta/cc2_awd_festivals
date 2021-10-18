@@ -51,7 +51,7 @@ catch (Exception $ex){
         <div class="row">
             <div class="col table-responsive">
             <h1>Festivals
-                 <!-- The add button will call festivals-create.php, the create will be implemented at a later stage -->
+                 <!-- The add button will call festivals-create.php, YOU WILL NOW WRITE THE CODE for festival-create.php  -->
                  <a class="btn button float-right" href="<?= APP_URL ?>/festival-create.php">Add</a>
                 </h1>
                 <form method="get">

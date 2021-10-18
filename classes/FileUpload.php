@@ -1,5 +1,6 @@
 <?php
 
+require_once 'config.php'; 
 class FileUpload
 {
 
@@ -28,7 +29,7 @@ class FileUpload
         if ($destination == null) {
 
             //We've defined UPLOAD_DIR in our config.
-            $this->destination = 'UPLOAD_DIR';
+            $this->destination = UPLOAD_DIR;
         } else {
             $this->destination = rtrim($destination, DIRECTORY_SEPARATOR);;
         }

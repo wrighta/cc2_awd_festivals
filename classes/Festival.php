@@ -38,15 +38,15 @@ class Festival {
         ":image_id" => $this->image_id
       ];
 
-      // We will uncomment this code when we get to do the Create 
-      // If there is no ID yet, then it's a new festival being created for the first time
-      // if ($this->id === null) {
-      //   $sql = "INSERT INTO festivals (" .
-      //     "title, description, location, start_date, end_date, contact_name, contact_email, contact_phone, image_id" .
-      //     ") VALUES (" .
-      //     ":title, :description, :location, :start_date, :end_date, :contact_name, :contact_email, :contact_phone, :image_id" .
-      //     ")";
-      // } else {
+      // This code is now uncommentrf - I had it here but commented out for the Edit
+      // If there is no ID yet, then create a new Festival - use the INSERT SQL command
+       if ($this->id === null) {
+         $sql = "INSERT INTO festivals (" .
+           "title, description, location, start_date, end_date, contact_name, contact_email, contact_phone, image_id" .
+           ") VALUES (" .
+           ":title, :description, :location, :start_date, :end_date, :contact_name, :contact_email, :contact_phone, :image_id" .
+           ")";
+       } else {
         // if there is an ID then it's an update for an existing festival in the database. 
         $sql = "UPDATE festivals SET " .
           "title = :title, " .
@@ -60,7 +60,7 @@ class Festival {
           "image_id = :image_id " .
           "WHERE id = :id";
         $params[":id"] = $this->id;
-    //  }
+      }
 
 
       $stmt = $conn->prepare($sql);
@@ -76,11 +76,11 @@ class Festival {
         throw new Exception("Failed to save festival.");
       }
 
-      //If the save() was a new festival created it won't have an ID
-      // so retrieve the ID assigned by the DB. - remember auto_increment in the Database for assigning primary keys
-      // if ($this->id === null) {
-      //   $this->id = $conn->lastInsertId();
-      // }
+      //If the save() was a new festival it won't have an ID until it's been created in the database. 
+      // so Now retrieve the ID assigned by the DB. - remember auto_increment in the Database for assigning primary keys
+      if ($this->id === null) {
+        $this->id = $conn->lastInsertId();
+      }
     } finally {
       if ($db !== null && $db->is_open()) {
         $db->close();

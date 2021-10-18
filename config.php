@@ -7,6 +7,7 @@ define('DB_SERVER', 'localhost');
 define('DB_DATABASE', 'festivals');
 define('DB_USERNAME', 'root');
 define('DB_PASSWORD', '');
+define ('UPLOAD_DIR', 'assets/img');
 
 
 set_include_path(
